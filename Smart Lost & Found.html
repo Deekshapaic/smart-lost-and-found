@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Lost & Found</title>
+
+<style>
+
+body{
+font-family:'Segoe UI',sans-serif;
+margin:0;
+background:#f5f5f5;
+}
+
+header{
+background:linear-gradient(90deg,#3a7bd5,#00d2ff);
+color:white;
+padding:15px 30px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+}
+
+nav a{
+color:white;
+margin-left:20px;
+text-decoration:none;
+font-weight:bold;
+cursor:pointer;
+}
+
+nav a:hover{
+color:#ffe082;
+}
+
+/* Pages */
+
+section{
+display:none;
+padding:60px 20px;
+min-height:80vh;
+}
+
+section.active{
+display:block;
+}
+
+/* Hero */
+
+.hero{
+height:80vh;
+background:url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80") center/cover;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+color:white;
+text-align:center;
+}
+
+.hero button{
+padding:14px 25px;
+border:none;
+background:#ff9800;
+color:white;
+border-radius:30px;
+font-size:18px;
+cursor:pointer;
+}
+
+/* Features */
+
+.features{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
+
+.feature{
+background:white;
+padding:25px;
+width:260px;
+border-radius:12px;
+box-shadow:0 6px 15px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+/* Prototype */
+
+.container{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px;
+max-width:900px;
+margin:auto;
+}
+
+.form-box{
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 6px 15px rgba(0,0,0,0.1);
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+button{
+padding:10px 15px;
+background:#00c853;
+border:none;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+.match-card{
+display:none;
+background:#e8f5e9;
+padding:20px;
+border-radius:10px;
+text-align:center;
+margin-top:20px;
+}
+
+/* Honest finder */
+
+.finder-container{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
+
+.finder{
+background:white;
+width:220px;
+padding:20px;
+border-radius:12px;
+box-shadow:0 6px 15px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.finder img{
+width:70px;
+border-radius:50%;
+}
+
+/* Rewards */
+
+.rewards{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+}
+
+.scratch-card{
+position:relative;
+width:250px;
+height:160px;
+border-radius:12px;
+overflow:hidden;
+}
+
+.reward-content{
+position:absolute;
+width:100%;
+height:100%;
+background:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+canvas{
+position:absolute;
+top:0;
+left:0;
+}
+
+/* Footer */
+
+footer{
+background:#222;
+color:#bbb;
+text-align:center;
+padding:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h2>Smart Lost & Found</h2>
+
+<nav>
+<a onclick="showPage('home')">Home</a>
+<a onclick="showPage('prototype')">Prototype</a>
+<a onclick="showPage('honest')">Honest Finder</a>
+<a onclick="showPage('rewards')">Rewards</a>
+</nav>
+
+</header>
+
+
+<!-- HOME -->
+
+<section id="home" class="active">
+
+<div class="hero">
+
+<h1>AI Powered Lost & Found</h1>
+
+<p>Helping people recover lost items quickly using smart matching.</p>
+
+<button onclick="showPage('prototype')">Try Prototype</button>
+
+</div>
+
+<h2>Features</h2>
+
+<div class="features">
+
+<div class="feature">
+<h3>Smart Matching</h3>
+<p>AI detects potential matches between lost and found items.</p>
+</div>
+
+<div class="feature">
+<h3>Secure Verification</h3>
+<p>OTP verification ensures rightful ownership.</p>
+</div>
+
+<div class="feature">
+<h3>Reward System</h3>
+<p>Honest finders earn points and recognition.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PROTOTYPE -->
+
+<section id="prototype">
+
+<h2>Prototype Demo</h2>
+
+<div class="container">
+
+<div class="form-box">
+
+<h3>Report Lost Item</h3>
+
+<form id="lostForm">
+
+<input type="text" id="lostItem" placeholder="Item name" required>
+
+<input type="text" id="lostLocation" placeholder="Location last seen" required>
+
+<textarea id="lostDesc" placeholder="Description"></textarea>
+
+<button type="submit">Submit</button>
+
+</form>
+
+</div>
+
+
+<div class="form-box">
+
+<h3>Upload Found Item</h3>
+
+<form id="foundForm">
+
+<input type="text" id="foundItem" placeholder="Item name" required>
+
+<input type="text" id="foundLocation" placeholder="Location found" required>
+
+<textarea id="foundDesc" placeholder="Description"></textarea>
+
+<button type="submit">Submit</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="match-card" id="matchCard">
+
+<h3>Possible Match Found</h3>
+
+<p><b>Lost Item:</b> <span id="lostResult"></span></p>
+
+<p><b>Found Item:</b> <span id="foundResult"></span></p>
+
+</div>
+
+</section>
+
+
+<!-- HONEST FINDER -->
+
+<section id="honest">
+
+<h2>Honest Finder Appreciation</h2>
+
+<div class="finder-container">
+
+<div class="finder">
+<img src="https://randomuser.me/api/portraits/men/32.jpg">
+<h4>Arjun Sharma</h4>
+<p>Returned lost wallet</p>
+</div>
+
+<div class="finder">
+<img src="https://randomuser.me/api/portraits/women/45.jpg">
+<h4>Priya Nair</h4>
+<p>Reported lost phone</p>
+</div>
+
+<div class="finder">
+<img src="https://randomuser.me/api/portraits/men/22.jpg">
+<h4>Ravi Patel</h4>
+<p>Returned backpack</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- REWARDS -->
+
+<section id="rewards">
+
+<h2>Scratch Rewards</h2>
+
+<div class="rewards">
+
+<div class="scratch-card">
+
+<div class="reward-content">
+<h3>Gold Honesty Badge</h3>
+<p>500 Points</p>
+</div>
+
+<canvas></canvas>
+
+</div>
+
+
+<div class="scratch-card">
+
+<div class="reward-content">
+<h3>Food Coupon ₹200</h3>
+<p>1000 Points</p>
+</div>
+
+<canvas></canvas>
+
+</div>
+
+
+<div class="scratch-card">
+
+<div class="reward-content">
+<h3>Voucher ₹500</h3>
+<p>1500 Points</p>
+</div>
+
+<canvas></canvas>
+
+</div>
+
+</div>
+
+</section>
+
+
+<footer>
+
+<p>©️ 2025 Smart Lost & Found Hackathon Prototype</p>
+
+</footer>
+
+
+<script>
+
+/* page switching */
+
+function showPage(pageId){
+
+let pages=document.querySelectorAll("section")
+
+pages.forEach(p=>{
+p.classList.remove("active")
+})
+
+document.getElementById(pageId).classList.add("active")
+
+}
+
+
+/* prototype matching */
+
+let lostItem=""
+let foundItem=""
+
+document.getElementById("lostForm").addEventListener("submit",function(e){
+
+e.preventDefault()
+
+lostItem=document.getElementById("lostItem").value.toLowerCase()
+
+alert("Lost item reported")
+
+checkMatch()
+
+})
+
+
+document.getElementById("foundForm").addEventListener("submit",function(e){
+
+e.preventDefault()
+
+foundItem=document.getElementById("foundItem").value.toLowerCase()
+
+alert("Found item uploaded")
+
+checkMatch()
+
+})
+
+
+function checkMatch(){
+
+if(lostItem && foundItem && lostItem===foundItem){
+
+document.getElementById("lostResult").innerText=lostItem
+
+document.getElementById("foundResult").innerText=foundItem
+
+document.getElementById("matchCard").style.display="block"
+
+}
+
+}
+
+
+/* scratch cards */
+
+document.querySelectorAll(".scratch-card").forEach(card=>{
+
+let canvas=card.querySelector("canvas")
+
+let ctx=canvas.getContext("2d")
+
+canvas.width=250
+canvas.height=160
+
+ctx.fillStyle="#bbb"
+ctx.fillRect(0,0,canvas.width,canvas.height)
+
+let draw=false
+
+canvas.addEventListener("mousedown",()=>draw=true)
+canvas.addEventListener("mouseup",()=>draw=false)
+
+canvas.addEventListener("mousemove",function(e){
+
+if(!draw)return
+
+let rect=canvas.getBoundingClientRect()
+
+let x=e.clientX-rect.left
+let y=e.clientY-rect.top
+
+ctx.globalCompositeOperation="destination-out"
+
+ctx.beginPath()
+ctx.arc(x,y,20,0,Math.PI*2)
+ctx.fill()
+
+})
+
+})
+
+</script>
+
+</body>
+</html>
